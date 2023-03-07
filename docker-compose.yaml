@@ -18,7 +18,9 @@ services:
       - "5433:5432"
 
   migration:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.migrations
     depends_on:
       - db
       - redis
@@ -29,9 +31,13 @@ services:
       DB_PASSWORD: null
       DB_NAME: users
       DB_PORT: 5432
+      NODE_ENV: docker
     
   server:
-    build: .
+    build: 
+      context: .
+      args:
+        - no_cache=1
     depends_on:
       - db
       - redis
@@ -43,3 +49,4 @@ services:
       DB_PASSWORD: null
       DB_NAME: users
       DB_PORT: 5432
+      NODE_ENV: docker

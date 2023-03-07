@@ -13,7 +13,7 @@ const port = 5501;
 // redis
 const config = {
   socket: {
-    host: 'docker.for.mac.localhost',
+    host: 'redis',
     port: 6379,
   },
 };
