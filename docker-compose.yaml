@@ -1,0 +1,45 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6380:6379"
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_PASSWORD: null
+      POSTGRES_USER: postgres
+      POSTGRES_DB: users
+    ports:
+      - "5433:5432"
+
+  migration:
+    build: .
+    depends_on:
+      - db
+      - redis
+    command: npx sequelize-cli db:migrate
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: null
+      DB_NAME: users
+      DB_PORT: 5432
+    
+  server:
+    build: .
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "5501:5501"
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: null
+      DB_NAME: users
+      DB_PORT: 5432

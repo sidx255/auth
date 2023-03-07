@@ -1,6 +1,6 @@
-const db = require("../models");
-const JWT = require("jsonwebtoken");
-const authUtils = require("../utils/authUtils"); 
+const db = require('../models');
+const JWT = require('jsonwebtoken');
+const authUtils = require('../utils/authUtils'); 
 
 const addUser = async (data) => {
   const { username, password } = data;
@@ -16,7 +16,7 @@ const verifyUser = async (data) => {
   if (user) {
     const passwordMatch = await authUtils.checkAuth(password, user.password);
     if (passwordMatch) {
-      const token = JWT.sign({ username }, process.env.JWT_SECRET, { expiresIn: "1D" });
+      const token = JWT.sign({ username }, process.env.JWT_SECRET, { expiresIn: '1D' });
       //if(authUtils.verifyJWT(token)) 
       await global.redisClient.set(username, token);
       return { token: token, success: true };
